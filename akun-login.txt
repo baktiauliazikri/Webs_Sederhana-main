@@ -1,0 +1,6 @@
+admin
+    - username : admin
+    - password : 123
+
+customer
+    - cek database tabel customer

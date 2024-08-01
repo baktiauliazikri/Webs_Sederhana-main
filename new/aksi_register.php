@@ -23,7 +23,7 @@ if(mysqli_num_rows($cek) == 0){
     $sql = mysqli_query($koneksi, "INSERT INTO customer VALUES('$newID','$nama','$alamat','$email','$password','$telp')") or die(mysqli_error($koneksi));
     
     if($sql){
-        echo '<script>alert("Berhasil Register!"); document.location="login.php";</script>';
+        echo '<script>alert("Berhasil Register!"); document.location="register.php";</script>';
     }else{
         echo '<script>alert("Gagal Register!"); document.location="register.php";</script>';
     }

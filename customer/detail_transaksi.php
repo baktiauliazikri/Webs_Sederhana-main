@@ -1,9 +1,16 @@
-<?php 
+<?php
 include '../koneksi.php';
 
+session_start();
+error_reporting(0);
+$id_customer = $_SESSION['id_customer'];
+
+$customer = mysqli_query($koneksi, "SELECT*FROM customer where id_customer = '$id_customer' ");
+$cust = mysqli_fetch_array($customer);
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,75 +22,49 @@ include '../koneksi.php';
 	<link rel="stylesheet" href="../assets/css/font-awesome.min.css">
 	<title>TEMAN COFFEE</title>
 </head>
+
 <body>
-
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-		<div class="container">
-
-			<a class="navbar-brand" href="#">TEMAN COFFEE</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-
-			<div class="collapse navbar-collapse" id="navbarResponsive">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<a class="nav-link" href="../index.php">HOME
-							<span class="sr-only">(current)</span>
-						</a>
-					</li>
-
-					<?php
-
-					session_start();
-					error_reporting(0);
-					$id_customer = $_SESSION['id_customer'];
-
-					$customer = mysqli_query($koneksi,"SELECT*FROM customer where id_customer = '$id_customer' ");
-					$cust = mysqli_fetch_array($customer);
-					?>
-
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<?php 
-							echo $cust['nama_customer'];
-							?>
-						</a>
-						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<a class="dropdown-item" href="profile.php">Profile</a>
-							<a class="dropdown-item" href="Keranjang.php">Keranjang</a>
-							<a class="dropdown-item" href="logout.php">Logout</a>
-						</div>
-					</li>
-
-					<li class="nav-item">
-						<a class="nav-link" href="../about.php">ABOUT US</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
 
 	<br><br><br><br>
 
 	<div class="container">
 
-		<?php 
+		<div class="row">
+			<div class="col-md-4">
+				<div class="garis"></div>
+			</div>
+			<div class="col-md-4">
+				<h1 class="display-5 text-center">Detail Transaksi</h1>
+			</div>
+			<div class="col-md-4">
+				<div class="garis"></div>
+			</div>
+		</div>
+
+		<?php
 		$id_transaksi = $_GET['id_transaksi'];
 		?>
 
-		<h1 class="display-5">Detail Transaksi</h1>
-		Silahkan Cetak Halaman <a href="" onclick="window.open('cetak_struk.php?id_transaksi=<?php echo $id_transaksi; ?>', 'newwindow','width=800,height=500'); 
-		return false;">Ini</a> Untuk Mengingat Detail Transaksi Anda 
+		<!-- <h1 class="display-5">Detail Transaksi</h1> -->
+		<!-- Silahkan Cetak Halaman <a href="" onclick="window.open('cetak_struk.php?id_transaksi=<?php echo $id_transaksi; ?>', 'newwindow','width=800,height=500'); 
+		return false;">Ini</a> Untuk Mengingat Detail Transaksi Anda -->
 
+		<div class="button-group">
+			<button class="btn btn-primary" onclick="window.open('cetak_struk.php?id_transaksi=<?php echo $id_transaksi; ?>', 'newwindow', 'width=800,height=500'); return false;">
+				<i class="fa fa-print"></i> Cetak
+			</button>
+			<a href="../index.php" class="btn btn-secondary">
+				<i class="fa fa-home"></i> Home
+			</a>
+		</div>
 		<hr>
 
 		<p>Berikut Adalah Detail Pembelian Dan Pengiriman</p>
 
-		<?php 
-		
-		$query= mysqli_query ($koneksi, " select *  from transaksi where id_transaksi = '$id_transaksi' order by id_transaksi desc");
-		$data= mysqli_fetch_array ($query);
+		<?php
+
+		$query = mysqli_query($koneksi, " select *  from transaksi where id_transaksi = '$id_transaksi' order by id_transaksi desc");
+		$data = mysqli_fetch_array($query);
 		?>
 		<div class="form-group row">
 			<label for="inputEmail3" class="col-sm-2 col-form-label"><b>Status</b></label>
@@ -107,7 +88,7 @@ include '../koneksi.php';
 			</div>
 		</div>
 		<hr>
-		
+
 		<div class="form-group row">
 			<label for="inputEmail3" class="col-sm-2 col-form-label"><b>Daftar Product</b></label>
 			<div class="col-sm-10">
@@ -126,25 +107,24 @@ include '../koneksi.php';
 							Subtotal
 						</th>
 					</tr>
-					<?php 
-					$query_keranjang= mysqli_query ($koneksi, " select *  from keranjang where id_transaksi = '$id_transaksi' order by id_keranjang desc");
-					while ($keranjang= mysqli_fetch_array ($query_keranjang))
-						{ ?>
+					<?php
+					$query_keranjang = mysqli_query($koneksi, " select *  from keranjang where id_transaksi = '$id_transaksi' order by id_keranjang desc");
+					while ($keranjang = mysqli_fetch_array($query_keranjang)) { ?>
 
-					<tr>
-						<td class="text-center">
-							<?php echo $keranjang['nama_product']; ?>
-						</td>
-						<td class="text-center">
-							Rp.<?php echo number_format($keranjang['harga']); ?>
-						</td>
-						<td class="text-center">
-							<?php echo $keranjang['qty']; ?>
-						</td>
-						<td class="text-center">
-							Rp.<?php echo number_format($keranjang['subtotal']); ?>
-						</td>
-					</tr>
+						<tr>
+							<td class="text-center">
+								<?php echo $keranjang['nama_product']; ?>
+							</td>
+							<td class="text-center">
+								Rp.<?php echo number_format($keranjang['harga']); ?>
+							</td>
+							<td class="text-center">
+								<?php echo $keranjang['qty']; ?>
+							</td>
+							<td class="text-center">
+								Rp.<?php echo number_format($keranjang['subtotal']); ?>
+							</td>
+						</tr>
 					<?php } ?>
 				</table>
 
@@ -153,8 +133,8 @@ include '../koneksi.php';
 		<div class="form-group row">
 			<label for="inputEmail3" class="col-sm-2 col-form-label"><b>Total Harga</b></label>
 			<div class="col-sm-10">
-				<?php 
-				$total_belanja = mysqli_query($koneksi,"SELECT SUM(subtotal) AS total from keranjang where id_transaksi = '$id_transaksi' ");
+				<?php
+				$total_belanja = mysqli_query($koneksi, "SELECT SUM(subtotal) AS total from keranjang where id_transaksi = '$id_transaksi' ");
 				$total_harga = mysqli_fetch_array($total_belanja);
 				?>
 				Rp.<?php echo number_format($total_harga['total']); ?>
@@ -162,9 +142,9 @@ include '../koneksi.php';
 		</div>
 		<hr>
 
-		<?php 
+		<?php
 		$kurir =  $data['kurir'];
-		$query_kurir = mysqli_query($koneksi,"SELECT*FROM kurir where nama_kurir = '$kurir' ");
+		$query_kurir = mysqli_query($koneksi, "SELECT*FROM kurir where nama_kurir = '$kurir' ");
 		$kurir = mysqli_fetch_array($query_kurir); ?>
 
 		<div class="form-group">
@@ -225,13 +205,13 @@ include '../koneksi.php';
 
 		</div>
 		<hr>
-		<?php  
+		<?php
 		$no_rek =  $data['no_rek'];
 
-		$query_rek = mysqli_query($koneksi,"SELECT*FROM rekening where no_rek = '$no_rek' ");
+		$query_rek = mysqli_query($koneksi, "SELECT*FROM rekening where no_rek = '$no_rek' ");
 		$rek = mysqli_fetch_array($query_rek);
 		?>
-		Silahkan Transfer sebesar Rp.<?php echo number_format($data['total']); ?> Ke Rekening Dibawah Ini: 
+		Silahkan Transfer sebesar Rp.<?php echo number_format($data['total']); ?> Ke Rekening Dibawah Ini:
 		<br><br>
 
 		<div class="media border p-3">
@@ -243,76 +223,76 @@ include '../koneksi.php';
 			</div>
 		</div>
 		<br>
-		Cantumkan Id Transaksi : <b><?php echo $data['id_transaksi']; ?></b> Pada Berita Transaksi 
+		Cantumkan Id Transaksi : <b><?php echo $data['id_transaksi']; ?></b> Pada Berita Transaksi
 
 		<hr>
 		<div class="form-group">
 			<label for="exampleInputEmail1"><b>Upload Bukti Transaksi</b></label>
 
 
-			<?php 
-			$query_bukti = mysqli_query($koneksi,"SELECT*FROM bukti_transaksi where id_transaksi = '$id_transaksi' ");
+			<?php
+			$query_bukti = mysqli_query($koneksi, "SELECT*FROM bukti_transaksi where id_transaksi = '$id_transaksi' ");
 			$bukti = mysqli_fetch_array($query_bukti);
 			?>
-			<?php if ($bukti == null){ ?>
+			<?php if ($bukti == null) { ?>
 
-			<form action="aksi_profile.php" method="POST" enctype="multipart/form-data">
-				<div class="form-group row">
-					<label for="inputEmail3" class="col-sm-2 col-form-label">Upload Bukti</label>
-					<div class="col-sm-10">
-						<input type="hidden" name="id_transaksi" value="<?php echo $data['id_transaksi']; ?>">
-						<input type="file" id="gambar" name="gambar" required="required">
+				<form action="aksi_profile.php" method="POST" enctype="multipart/form-data">
+					<div class="form-group row">
+						<label for="inputEmail3" class="col-sm-2 col-form-label">Upload Bukti</label>
+						<div class="col-sm-10">
+							<input type="hidden" name="id_transaksi" value="<?php echo $data['id_transaksi']; ?>">
+							<input type="file" id="gambar" name="gambar" required="required">
+						</div>
 					</div>
-				</div>
-				<input type="hidden" name="aksi" value="upload_bukti">
-				<button type="submit" class="btn btn-primary btn-sm">Upload</button>
-			</form>
-			<?php 
-		}else if ($bukti['status'] == 'Valid') {
+					<input type="hidden" name="aksi" value="upload_bukti">
+					<button type="submit" class="btn btn-primary btn-sm">Upload</button>
+				</form>
+			<?php
+			} else if ($bukti['status'] == 'Valid') {
 			?>
-			<h5 class="text-success">Pembayaran Telah Diverifikasi</h5>
-			
-			<?php 
-			
-		}else if ($bukti['status'] == 'Tidak Valid'){
+				<h5 class="text-success">Pembayaran Telah Diverifikasi</h5>
+
+			<?php
+
+			} else if ($bukti['status'] == 'Tidak Valid') {
 			?>
 
-			<br>
-			<h5 class="text-danger">Bukti Yang Telah Di Input Tidak Valid, Mohon Upload Kembali Bukti Transaksi! </h5>
-			<br>
+				<br>
+				<h5 class="text-danger">Bukti Yang Telah Di Input Tidak Valid, Mohon Upload Kembali Bukti Transaksi! </h5>
+				<br>
 
-			<form action="aksi_profile.php" method="POST" enctype="multipart/form-data">
-				<div class="form-group row">
-					<label for="inputEmail3" class="col-sm-2 col-form-label">Upload Bukti</label>
-					<div class="col-sm-10">
-						<input type="hidden" name="id_transaksi" value="<?php echo $data['id_transaksi']; ?>">
-						<input type="file" id="gambar" name="gambar" required="required">
+				<form action="aksi_profile.php" method="POST" enctype="multipart/form-data">
+					<div class="form-group row">
+						<label for="inputEmail3" class="col-sm-2 col-form-label">Upload Bukti</label>
+						<div class="col-sm-10">
+							<input type="hidden" name="id_transaksi" value="<?php echo $data['id_transaksi']; ?>">
+							<input type="file" id="gambar" name="gambar" required="required">
+						</div>
 					</div>
-				</div>
-				<input type="hidden" name="aksi" value="edit_bukti">
-				<button type="submit" class="btn btn-primary btn-sm">Upload</button>
-			</form>
+					<input type="hidden" name="aksi" value="edit_bukti">
+					<button type="submit" class="btn btn-primary btn-sm">Upload</button>
+				</form>
 
 
-			<?php }else if ($bukti['status'] == 'Menunggu Konfirmasi'){
-				?>
+			<?php } else if ($bukti['status'] == 'Menunggu Konfirmasi') {
+			?>
 				<h5>Bukti Transaksi Sukses Diupload, Menunggu Verifikasi Dari Admin</h5>
-				<?php } ?>
-			</div>
-
-			<br><br><br><br>
-
-
+			<?php } ?>
 		</div>
 
-		<div id="footer">
+		<br><br><br><br>
 
-			<br><br>  
-			<h5 class="text-center">COPYSRIGHT @SobatNgoding 2019</h5>
-			<br><br>  
 
-		</div>
+	</div>
 
-	</body>
-	</html>
+	<div id="footer">
 
+		<br><br>
+		<h5 class="text-center">COPYSRIGHT @SobatNgoding 2019</h5>
+		<br><br>
+
+	</div>
+
+</body>
+
+</html>

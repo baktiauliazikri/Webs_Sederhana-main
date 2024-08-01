@@ -14,13 +14,11 @@ include '../ceklogin.php';
   <link rel="stylesheet" type="text/css" href="../docs/css/main.css">
   <!-- Font-icon css-->
   <link rel="stylesheet" type="text/css" href="../docs/fa/css/font-awesome.min.css">
-
-
 </head>
 
 <body class="app sidebar-mini rtl">
   <!-- Navbar-->
-  <header class="app-header"><a class="app-header__logo" href="../index.php">TEMAN COFFEE</a>
+  <header class="app-header"><a class="app-header__logo" href="../index.php">Dashboard</a>
     <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
     <!-- Navbar Right Menu-->
     <ul class="app-nav">
@@ -39,7 +37,7 @@ include '../ceklogin.php';
       <div>
         <?php
         $id_admin = $_SESSION['id_admin'];
-        $q_user = mysqli_query($koneksi, "SELECT*FROM admin where id_admin = '$id_admin'");
+        $q_user = mysqli_query($koneksi, "SELECT * FROM admin WHERE id_admin = '$id_admin'");
         $user = mysqli_fetch_array($q_user);
         ?>
         <p class="app-sidebar__user-name"><?php echo $user['nama_admin']; ?></p>
@@ -57,8 +55,8 @@ include '../ceklogin.php';
       <li><a class="app-menu__item" href="../customer/customer.php"><i class="app-menu__icon fa fa-user"></i><span class="app-menu__label">Customer</span></a></li>
       <li><a class="app-menu__item active" href="laporan_transaksi.php"><i class="app-menu__icon fa fa-file"></i><span class="app-menu__label">Laporan Transaksi</span></a></li>
     </ul>
-
   </aside>
+
   <main class="app-content">
     <div class="app-title">
       <div>
@@ -70,52 +68,20 @@ include '../ceklogin.php';
         <li class="breadcrumb-item"><a href="#">Laporan Transaksi</a></li>
       </ul>
     </div>
+
     <div class="row">
       <div class="col-md-12">
         <div class="tile">
           <div class="tile-body">
 
             <?php
-
             $semuadata = array();
-            $mulai = "-";
-            $selesai = "-";
-            if (isset($_POST['lihat'])) {
-              $mulai = $_POST['tglm'];
-              $selesai = $_POST['tgls'];
-              $mulai1 =  date("d M Y h:i", strtotime($mulai));
-              $selesai1 =  date("d M Y h:i", strtotime($selesai));
-              $ambil = $koneksi->query("SELECT * FROM transaksi WHERE tgl_transaksi BETWEEN '$mulai1' AND '$selesai1'");
-              while ($pecah = $ambil->fetch_assoc()) {
-                $semuadata[] = $pecah;
-              }
-              // echo "<pre>";
-              // print_r($semuadata);
-              // echo "</pre>";
+            $ambil = $koneksi->query("SELECT * FROM transaksi");
+            while ($pecah = $ambil->fetch_assoc()) {
+              $semuadata[] = $pecah;
             }
-
             ?>
 
-            <form method="post">
-              <div class="row">
-                <div class="col-md-5">
-                  <div class="form-group">
-                    <label>Tanggal Mulai</label>
-                    <input type="date" name="tglm" class="form-control" value="<?php echo $mulai ?>">
-                  </div>
-                </div>
-                <div class="col-md-5">
-                  <div class="form-group">
-                    <label>Tanggal Selesai</label>
-                    <input type="date" name="tgls" class="form-control" value="<?php echo $selesai ?>">
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <label>&nbsp;</label><br>
-                  <button class="btn btn-primary" name="lihat">Lihat</button>
-                </div>
-              </div>
-            </form>
             <div id="laporan_transaksi">
               <table class="table">
                 <thead>
@@ -130,7 +96,6 @@ include '../ceklogin.php';
                 <?php $total = 0; ?>
                 <?php foreach ($semuadata as $key => $value) : ?>
                   <?php $total += $value['total']; ?>
-
                   <tbody>
                     <tr>
                       <td><?php echo $key + 1; ?></td>
@@ -141,11 +106,9 @@ include '../ceklogin.php';
                     </tr>
                   <?php endforeach ?>
                   </tbody>
-
                   <tfoot>
                     <tr>
                       <?php if ($semuadata == null) { ?>
-
                         <th colspan="2"></th>
                         <th>Tidak Ada Data</th>
                         <th colspan="2"></th>
@@ -153,17 +116,12 @@ include '../ceklogin.php';
                         <th colspan="3">Total</th>
                         <th>Rp. <?php echo number_format($total); ?></th>
                         <th></th>
-
-                        <a href="" onclick="window.open('cetak_laporan.php?mulai=<?php echo $mulai1; ?>&selesai=<?php echo $selesai1; ?> ', 'newwindow','width=800,height=500'); 
-                     return false;">Print</a>
+                        <a href="" onclick="window.open('cetak_laporan.php', 'newwindow','width=800,height=500'); return false;">Print</a>
                       <?php } ?>
-                    </tr>
-                    <tr>
                     </tr>
                   </tfoot>
               </table>
             </div>
-
 
           </div>
         </div>
@@ -176,6 +134,7 @@ include '../ceklogin.php';
   <script src="../docs/js/bootstrap.min.js"></script>
   <script src="../docs/js/main.js"></script>
   <!-- The javascript plugin to display page loading on top-->
+  <script src="../docs/js/plugins/pace.min.js"></script>
 </body>
 
 </html>

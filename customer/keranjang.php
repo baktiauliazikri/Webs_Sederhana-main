@@ -1,9 +1,13 @@
-<?php 
+<?php
 include '../koneksi.php';
+session_start();
 
+// Ensure id_customer is set from the session
+$id_customer = $_SESSION['id_customer'] ?? null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,64 +17,18 @@ include '../koneksi.php';
   <script src="../assets/js/jquery.min.js"></script>
   <script src="../assets/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="../assets/css/font-awesome.min.css">
-  <title>TEMAN COFFEE</title>
+  <title></title>
 </head>
+
 <body>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
 
-      <a class="navbar-brand" href="#">TEMAN COFFEE</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="../index.php">HOME
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
-
-          <?php
-
-          session_start();
-          error_reporting(0);
-          $id_customer = $_SESSION['id_customer'];
-
-          $customer = mysqli_query($koneksi,"SELECT*FROM customer where id_customer = '$id_customer' ");
-          $cust = mysqli_fetch_array($customer);
-          ?>
-
-          <li class="nav-item dropdown active">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <?php 
-              echo $cust['nama_customer'];
-              ?>
-
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="profile.php">Profile</a>
-              <a class="dropdown-item" href="Keranjang.php">Keranjang</a>
-              <a class="dropdown-item" href="logout.php">Logout</a>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="../about.php">ABOUT US</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  
-  <?php 
-  $query = mysqli_query ($koneksi, " select *  from keranjang where id_customer = '$id_customer' && id_transaksi = 'Belum Ada Transaksi' order by id_keranjang desc");
+  <?php
+  $query = mysqli_query($koneksi, " select *  from keranjang where id_customer = '$id_customer' && id_transaksi = 'Belum Ada Transaksi' order by id_keranjang desc");
   $data = mysqli_fetch_array($query);
 
   if ($data == null) {
-    ?>
+  ?>
     <br><br><br><br><br><br><br><br>
     <center>
       <img src="../assets/img/empty-cart-vector.png" width="200px" height="200px">
@@ -79,40 +37,76 @@ include '../koneksi.php';
       <a href="../index.php" class="btn btn-dark">Belanja Sekarang</a>
     </center>
 
-    <?php 
-  }else{
-   ?>
-   <br><br><br><br><br>
-   
-   <div class="container">
+  <?php
+  } else {
+  ?>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
 
-   <div class="row">
-          <div class="col-md-4"><div class="garis"></div></div>
-          <div class="col-md-4"><h1 class="display-5 text-center">Keranjang</h1></div>
-          <div class="col-md-4"><div class="garis"></div></div>
+        <a class="navbar-brand" href="#">Jahe Emprit Mama Gio</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.php">Home
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <?php
+            // session_start();
+            $id_customer = $_SESSION['id_customer'];
+            $customer = mysqli_query($koneksi, "SELECT*FROM customer where id_customer = '$id_customer' ");
+            $cust = mysqli_fetch_array($customer);
+            ?>
+
+            <li class="nav-item dropdown active">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <?php
+                echo $cust['nama_customer'];
+                ?>
+
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="profile.php">Profile</a>
+                <a class="dropdown-item" href="Keranjang.php">Keranjang</a>
+                <a class="dropdown-item" href="logout.php">Logout</a>
+              </div>
+            </li>
+          </ul>
         </div>
-        <br><br>
+      </div>
+    </nav>
+    <br><br><br><br><br>
 
-     <div id="data-keranjang"></div>
+    <div class="container">
 
-     <a href="../index.php" class="btn btn-primary">Lanjutkan Belanja</a>
-     <a href="checkout.php" class="btn btn-success">Checkout</a>
-     <?php } ?>
-     <br><br><br><br><br><br><br><br>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="garis"></div>
+        </div>
+        <div class="col-md-4">
+          <h1 class="display-5 text-center">Keranjang</h1>
+        </div>
+        <div class="col-md-4">
+          <div class="garis"></div>
+        </div>
+      </div>
+      <br><br>
 
+      <div id="data-keranjang"></div>
 
-   </div>
+      <a href="../index.php" class="btn btn-primary">Lanjutkan Belanja</a>
+      <a href="checkout.php" class="btn btn-success">Checkout</a>
+    <?php } ?>
+    <br><br><br><br><br><br><br><br>
 
-    <div id="footer">
-
-      <br><br>  
-      <h5 class="text-center">COPYSRIGHT @SobatNgoding 2019</h5>
-      <br><br>  
 
     </div>
-
-  
 </body>
+
 </html>
 
 <div id="modal-edit" class="modal fade" role="dialog">
@@ -125,17 +119,17 @@ include '../koneksi.php';
         </div>
         <div class="modal-body">
           <div id="data-edit">
-          </div>        
+          </div>
         </div>
-        
+
         <div class="modal-footer">
           <button type="button" class="btn btn-info" data-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-primary" >Simpan</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
         </div>
-      </form>   
+      </form>
     </div>
   </div>
-</div> 
+</div>
 
 <div id="modal-hapus" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
@@ -145,29 +139,29 @@ include '../koneksi.php';
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body">
-       <div id="delete-keranjang"></div>
-     </div>
-   </form>   
- </div>
-</div>
+        <div id="delete-keranjang"></div>
+      </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 
 <script type="text/javascript">
-
-  $(document).ready(function(){
+  $(document).ready(function() {
     var data = "data_keranjang.php";
     $('#data-keranjang').load(data);
 
-    $(document).on('click','#edit',function(e){
+    $(document).on('click', '#edit', function(e) {
       e.preventDefault();
       $("#modal-edit").modal('show');
-      $.post('edit_keranjang.php',
-        {id:$(this).attr('data-id')},
-        function(html){
+      $.post('edit_keranjang.php', {
+          id: $(this).attr('data-id')
+        },
+        function(html) {
           $("#data-edit").html(html);
-        }   
-        );
+        }
+      );
     });
 
 
@@ -186,43 +180,44 @@ include '../koneksi.php';
           $('#modal-edit').modal('hide');
           $("#form-edit")[0].reset();
           alert('Edit Data Sukses');
-          $('#data-keranjang').load(data); 
+          $('#data-keranjang').load(data);
         },
-        error: function(){
+        error: function() {
           $('#modal-edit').modal('hide');
           $("#form-edit")[0].reset();
           alert('Edit Data Gagal');
-        } 
+        }
       });
     });
 
 
-    $(document).on('click','#confirm_delete',function(e){
+    $(document).on('click', '#confirm_delete', function(e) {
       e.preventDefault();
       $("#modal-hapus").modal('show');
-      $.post('confirm_delete.php',
-        {id:$(this).attr('data-id')},
-        function(html){
+      $.post('confirm_delete.php', {
+          id: $(this).attr('data-id')
+        },
+        function(html) {
           $("#delete-keranjang").html(html);
-        }   
-        );
+        }
+      );
     });
 
 
-    $(document).on('click','#hapus',function(e){
+    $(document).on('click', '#hapus', function(e) {
       e.preventDefault();
-      $.post('aksi_keranjang.php',
-        {id:$(this).attr('data-id')},
-        function(html){
+      $.post('aksi_keranjang.php', {
+          id: $(this).attr('data-id')
+        },
+        function(html) {
           $('#modal-hapus').modal('hide');
           alert('Delete Data Sukses');
           $('#data-keranjang').load(data);
 
-        }   
-        );
+        }
+      );
     });
 
 
   });
 </script>
-

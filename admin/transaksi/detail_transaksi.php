@@ -6,7 +6,7 @@ include '../ceklogin.php';
 <html lang="en">
 
 <head>
-  <title>Blank Page - Vali Admin</title>
+  <title>Dashboard - Admin</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,7 +18,7 @@ include '../ceklogin.php';
 
 <body class="app sidebar-mini rtl">
   <!-- Navbar-->
-  <header class="app-header"><a class="app-header__logo" href="../index.php">TEMAN COFFEE</a>
+  <header class="app-header"><a class="app-header__logo" href="../index.php">Dashboard</a>
     <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
     <!-- Navbar Right Menu-->
     <ul class="app-nav">
@@ -61,7 +61,7 @@ include '../ceklogin.php';
     <div class="app-title">
       <div>
         <h1><i class="fa fa-desktop"></i> Detail transaksi</h1>
-        <p>Detail Transaksi TEMAN COFFEE</p>
+        <p>Detail Transaksi Jahe Emprit Mama Gio</p>
       </div>
       <ul class="app-breadcrumb breadcrumb">
         <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
