@@ -144,18 +144,18 @@ $is_logged_in = isset($_SESSION['user_id']);
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo, amet
         </p>
         <div class="row">
-            <form action="">
+            <form action="send_whatsapp.php" method="POST">
                 <div class="input-group">
                     <i data-feather="user"></i>
-                    <input type="text" placeholder="Nama" />
+                    <input type="text" name="name" placeholder="Nama" />
                 </div>
                 <div class="input-group">
                     <i data-feather="mail"></i>
-                    <input type="text" placeholder="Email" />
+                    <input type="text" name="email" placeholder="Email" />
                 </div>
                 <div class="input-group">
                     <i data-feather="phone"></i>
-                    <input type="text" placeholder="Nomor Hp" />
+                    <input type="text" name="phone" placeholder="Nomor Hp" />
                 </div>
                 <button type="submit" class="btn">Kirim pesan</button>
             </form>
